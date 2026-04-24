@@ -1,0 +1,14 @@
+{
+  "name": "llm-timeline",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "LLM platform evolution timeline — auto-refreshed via GitHub Actions + Claude API",
+  "scripts": {
+    "refresh": "node scripts/refresh.js",
+    "dev": "npx serve . -p 3000"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0"
+  }
+}

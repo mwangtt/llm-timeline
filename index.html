@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM Platform Evolution — 2025–2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:      #1a2332;
+    --ink-2:    rgba(26,35,50,0.72);
+    --ink-3:    rgba(26,35,50,0.50);
+    --ink-4:    rgba(26,35,50,0.32);
+    --accent:   #e8a020;
+    --accent-2: #f5bb50;
+    --good:     #16a05a;
+    --bad:      #d94a5a;
+    --glass:    rgba(255,255,255,0.72);
+    --glass-hi: rgba(255,255,255,0.88);
+    --glass-lo: rgba(255,255,255,0.45);
+    --stroke:   rgba(26,35,50,0.12);
+    --stroke-lo:rgba(26,35,50,0.07);
+    --radius:   22px;
+    --radius-sm:14px;
+    --openai:    #2b8fd4;
+    --gemini:    #1ea868;
+    --claude:    #d4601a;
+    --aimode:    #6a52c8;
+    --aioverview:#c08010;
+    --perplexity:#3a7ab8;
+  }
+  *,*::before,*::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: #f0f4f8;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    letter-spacing: 0.005em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .bg {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(900px 600px at 5% 0%, rgba(180,210,240,0.5), transparent 60%),
+      radial-gradient(700px 500px at 100% 20%, rgba(200,230,250,0.4), transparent 65%),
+      linear-gradient(180deg, #e8eef5 0%, #f0f4f8 50%, #eef2f7 100%);
+  }
+  .bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(26,35,50,0.055) 1px, transparent 1.2px);
+    background-size: 28px 28px;
+  }
+  .noise { display: none; }
+  .cursor-glow { display: none; }
+
+  .shell {
+    position: relative; z-index: 2;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 36px 48px 120px;
+  }
+
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 40px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+    font-weight: 700; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink);
+  }
+  .brand-mark {
+    width: 30px; height: 30px; border-radius: 9px;
+    background: linear-gradient(135deg, #e8a020 0%, #f07a10 100%);
+    box-shadow: 0 4px 14px rgba(232,160,32,0.4);
+    position: relative;
+  }
+  .brand-mark::after { content:''; position:absolute; inset:7px; border-radius: 4px; background: rgba(255,255,255,0.9); }
+  .brand-mark::before { content:''; position:absolute; inset: 11px 11px 7px 11px; border-radius: 2px; background: var(--accent); }
+  .topbadge {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 999px;
+    background: white;
+    border: 1px solid var(--stroke);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+    color: var(--ink-2);
+  }
+  .topbadge .dot {
+    width: 7px; height: 7px; border-radius: 999px;
+    background: var(--good); box-shadow: 0 0 6px var(--good);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  #badge-date { font-style: italic; color: var(--ink-3); margin-left: 4px; }
+
+  .hero {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 32px;
+    margin-bottom: 40px;
+    align-items: end;
+  }
+  .hero-kicker {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .hero-kicker::before { content:''; width: 28px; height: 1px; background: var(--accent); }
+  .hero h1 {
+    font-weight: 800;
+    font-size: clamp(36px, 5vw, 68px);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    margin: 0 0 20px 0;
+    color: var(--ink);
+  }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero-sub { font-size: 15px; line-height: 1.55; color: var(--ink-2); max-width: 52ch; font-weight: 400; }
+  .hero-meta { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+  .hero-meta .tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border-radius: 999px;
+    background: rgba(232,160,32,0.12); border: 1px solid rgba(232,160,32,0.3);
+    color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .hero-meta .tag .dot { width:6px; height:6px; border-radius:999px; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: pulse 1.6s ease-in-out infinite; }
+  .hero-meta .line { font-size: 12px; color: var(--ink-3); line-height: 1.5; }
+  .hero-meta .line b { color: var(--ink); font-weight: 600; }
+
+  @keyframes pulse { 0%,100%{ opacity:1; transform: scale(1); } 50%{ opacity: 0.5; transform: scale(1.4); } }
+
+  .tabs {
+    display: flex; gap: 6px; padding: 6px;
+    border-radius: 999px;
+    background: white; border: 1px solid var(--stroke);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    width: fit-content; margin-bottom: 28px; position: relative;
+  }
+  .tab {
+    all: unset; padding: 10px 22px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-3); cursor: pointer;
+    display: flex; align-items: center; gap: 10px;
+    transition: color 0.3s ease; position: relative; z-index: 2;
+  }
+  .tab.active { color: #1a2332; }
+  .tab-pill {
+    position: absolute; top: 6px; bottom: 6px; left: 6px; width: 0;
+    background: var(--accent); border-radius: 999px;
+    box-shadow: 0 4px 16px rgba(232,160,32,0.35);
+    transition: left 0.5s cubic-bezier(.7,.1,.2,1), width 0.5s cubic-bezier(.7,.1,.2,1);
+    z-index: 1;
+  }
+
+  .glass {
+    background: white;
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius);
+    position: relative; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .glass > * { position: relative; z-index: 1; }
+
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadein 0.5s ease; }
+  @keyframes fadein { from{ opacity:0; transform: translateY(10px); } to{ opacity:1; transform: translateY(0); } }
+
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  .sec-hd {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin: 52px 0 20px;
+  }
+  .sec-hd-l .kicker {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 10px; display: flex; align-items: center; gap: 10px;
+  }
+  .sec-hd-l .kicker::before { content:''; width: 24px; height: 1px; background: var(--accent); }
+  .sec-hd-l h2 { font-size: clamp(28px, 3.5vw, 42px); font-weight: 700; letter-spacing: -0.02em; margin: 0; line-height: 1.05; color: var(--ink); }
+  .sec-hd-r { font-size: 12px; color: var(--ink-3); max-width: 36ch; line-height: 1.5; text-align: right; }
+
+  .timeline-outer {
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+  }
+  .timeline-outer::-webkit-scrollbar { height: 6px; }
+  .timeline-outer::-webkit-scrollbar-thumb { background: rgba(26,35,50,0.12); border-radius: 999px; }
+  .timeline-outer::-webkit-scrollbar-track { background: transparent; }
+
+  .timeline-grid {
+    display: grid;
+    gap: 0;
+  }
+
+  .th {
+    text-align: center;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-3);
+    padding: 10px 6px;
+    border-right: 1px solid var(--stroke-lo);
+    border-bottom: 1px solid var(--stroke);
+    background: #f7f9fc;
+    position: sticky; top: 0; z-index: 3;
+  }
+  .th:first-child { background: #f7f9fc; border-right: none; }
+  .th.year-26 { color: var(--accent); }
+
+  .trl {
+    display: flex; align-items: center;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-3);
+    padding: 8px 14px 8px 4px;
+    border-bottom: 1px solid var(--stroke-lo);
+    white-space: nowrap;
+    background: #f7f9fc;
+    position: sticky; left: 0; z-index: 2;
+  }
+  .trl .pip { width: 8px; height: 8px; border-radius: 999px; margin-right: 8px; flex-shrink: 0; }
+
+  .tc {
+    border-right: 1px solid var(--stroke-lo);
+    border-bottom: 1px solid var(--stroke-lo);
+    padding: 6px 5px;
+    min-height: 90px;
+    vertical-align: top;
+    transition: background 0.2s;
+  }
+  .tc:last-child { border-right: none; }
+
+  .ev {
+    border-radius: 10px;
+    padding: 7px 9px;
+    margin-bottom: 5px;
+    position: relative;
+    cursor: default;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .ev:hover { transform: translateY(-2px) scale(1.01); z-index: 20; box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+  .ev-date { font-size: 9px; opacity: 0.65; margin-bottom: 2px; font-weight: 600; }
+  .ev-name { font-size: 11px; font-weight: 700; line-height: 1.25; }
+  .ev-tags { display: flex; flex-wrap: wrap; gap: 2px; margin-top: 4px; }
+  .ev-tag { font-size: 9px; padding: 1px 5px; border-radius: 8px; font-weight: 600; opacity: 0.85; }
+
+  .ev-tip {
+    display: none;
+    position: absolute; left: calc(100% + 10px); top: 0;
+    width: 240px;
+    background: white;
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    padding: 14px 16px;
+    color: var(--ink);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    z-index: 200;
+    font-size: 12px; line-height: 1.5;
+    pointer-events: none;
+  }
+  .ev:hover .ev-tip { display: block; }
+  .ev-tip h4 { font-size: 13px; font-weight: 700; margin: 0 0 8px; color: var(--accent); }
+  .ev-tip ul { padding-left: 14px; color: var(--ink-2); margin: 0; }
+  .ev-tip ul li { margin-bottom: 4px; }
+
+  .p-openai    { background: rgba(43,143,212,0.09); border-left: 3px solid var(--openai); }
+  .p-openai .ev-name { color: #1565a8; }
+  .p-openai .ev-tag  { background: rgba(43,143,212,0.14); color: #1565a8; }
+
+  .p-gemini    { background: rgba(30,168,104,0.09); border-left: 3px solid var(--gemini); }
+  .p-gemini .ev-name { color: #0d7a45; }
+  .p-gemini .ev-tag  { background: rgba(30,168,104,0.14); color: #0d7a45; }
+
+  .p-claude    { background: rgba(212,96,26,0.09); border-left: 3px solid var(--claude); }
+  .p-claude .ev-name { color: #a04010; }
+  .p-claude .ev-tag  { background: rgba(212,96,26,0.14); color: #a04010; }
+
+  .p-aimode    { background: rgba(106,82,200,0.09); border-left: 3px solid var(--aimode); }
+  .p-aimode .ev-name { color: #4a2fa8; }
+  .p-aimode .ev-tag  { background: rgba(106,82,200,0.14); color: #4a2fa8; }
+
+  .p-aioverview{ background: rgba(192,128,16,0.09); border-left: 3px solid var(--aioverview); }
+  .p-aioverview .ev-name { color: #8a5c08; }
+  .p-aioverview .ev-tag  { background: rgba(192,128,16,0.14); color: #8a5c08; }
+
+  .p-perplexity{ background: rgba(58,122,184,0.09); border-left: 3px solid var(--perplexity); }
+  .p-perplexity .ev-name { color: #1e5a98; }
+  .p-perplexity .ev-tag  { background: rgba(58,122,184,0.14); color: #1e5a98; }
+
+  .bench-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .bench-card {
+    padding: 20px 22px;
+    transition: transform 0.3s cubic-bezier(.2,.8,.2,1);
+  }
+  .bench-card:hover { transform: translateY(-3px); }
+  .bench-card .bc-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+  .bench-card .bc-winner { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px; line-height: 1.2; }
+  .bench-card .bc-score { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: var(--accent); }
+
+  .feat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .feat-card { padding: 22px 24px; transition: transform 0.3s cubic-bezier(.2,.8,.2,1); }
+  .feat-card:hover { transform: translateY(-3px); }
+  .feat-card h3 {
+    font-size: 13px; font-weight: 700; margin: 0 0 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .feat-card h3 .pip { width: 10px; height: 10px; border-radius: 999px; flex-shrink: 0; }
+  .feat-card ul { padding-left: 16px; color: var(--ink-2); font-size: 12px; margin: 0; }
+  .feat-card ul li { margin-bottom: 6px; line-height: 1.5; }
+  .feat-card ul li strong { color: var(--ink); font-weight: 700; }
+
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    color: var(--ink-3);
+    padding: 5px 12px; border-radius: 999px;
+    background: white; border: 1px solid var(--stroke);
+  }
+  .legend-item .pip { width: 8px; height: 8px; border-radius: 999px; flex-shrink: 0; }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: rgba(26,35,50,0.18); border-radius: 999px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+
+  .tl-controls {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .tl-controls .ctrl-lbl {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-4); margin-right: 2px;
+  }
+  .ctrl-chip {
+    all: unset;
+    padding: 6px 14px; border-radius: 999px;
+    background: white; border: 1px solid var(--stroke);
+    font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-3); cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .ctrl-chip:hover { background: #f5f7fa; color: var(--ink); }
+  .ctrl-chip.active { background: var(--accent); color: white; border-color: transparent; box-shadow: 0 3px 12px rgba(232,160,32,0.35); }
+  .ctrl-sep { width: 1px; height: 24px; background: var(--stroke); margin: 0 4px; }
+  .ctrl-chip.rev { display: flex; align-items: center; gap: 6px; }
+  .ctrl-chip.rev svg { transition: transform 0.3s ease; }
+  .ctrl-chip.rev.active svg { transform: scaleX(-1); }
+
+  /* loading state */
+  .loading-msg {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 200px; color: var(--ink-3);
+    font-size: 13px; font-weight: 600; letter-spacing: 0.08em;
+    gap: 12px;
+  }
+  .loading-spinner {
+    width: 18px; height: 18px; border-radius: 999px;
+    border: 2px solid var(--stroke);
+    border-top-color: var(--accent);
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .bench-grid { grid-template-columns: repeat(2,1fr); }
+    .feat-grid { grid-template-columns: 1fr; }
+    .shell { padding: 20px 16px 80px; }
+  }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<div class="shell">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      LLM Intelligence · 2025–2026
+    </div>
+    <div class="topbadge">
+      <div class="dot"></div>
+      Data through <span id="badge-date">loading…</span>
+    </div>
+  </div>
+
+  <section class="hero reveal">
+    <div>
+      <div class="hero-kicker">GEO Research Reference</div>
+      <h1>LLM Platform<br><em>Evolution</em></h1>
+      <p class="hero-sub">Model releases, capability shifts, and competitive positioning across OpenAI, Google, Anthropic, and Perplexity — <span id="hero-coverage">loading…</span></p>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="hero-meta">
+      <div class="tag"><span class="dot"></span> 6 Platforms Tracked</div>
+      <div class="line"><b id="hero-event-count">–</b> major releases indexed</div>
+      <div class="line">Coverage: <b id="hero-coverage-b">loading…</b></div>
+      <div class="line">Benchmarks: <b>Arena · SWE-bench · GPQA · ARC-AGI-2</b></div>
+    </div>
+  </section>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-tab="timeline">Timeline</button>
+    <button class="tab" data-tab="benchmarks">Benchmarks</button>
+    <button class="tab" data-tab="signatures">Platform Signatures</button>
+    <div class="tab-pill" id="tab-pill"></div>
+  </div>
+
+  <div id="panel-timeline" class="panel active">
+    <div class="sec-hd reveal">
+      <div class="sec-hd-l">
+        <div class="kicker">§ 01 — Release Timeline</div>
+        <h2>Every major drop, in one grid.</h2>
+      </div>
+      <div class="sec-hd-r">Hover any card for benchmark details and capability notes. Scroll horizontally to navigate months.</div>
+    </div>
+
+    <div class="tl-controls reveal">
+      <span class="ctrl-lbl">Year:</span>
+      <button class="ctrl-chip active" id="yr-2025" data-yr="2025">2025</button>
+      <button class="ctrl-chip active" id="yr-2026" data-yr="2026">2026</button>
+      <div class="ctrl-sep"></div>
+      <button class="ctrl-chip rev" id="btn-reverse">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Newest First
+      </button>
+    </div>
+
+    <div class="glass reveal" style="padding: 0; overflow: hidden;">
+      <div class="timeline-outer" id="timeline-outer">
+        <div class="timeline-grid" id="timeline-grid">
+          <div class="loading-msg">
+            <div class="loading-spinner"></div>
+            Loading timeline data…
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-benchmarks" class="panel">
+    <div class="sec-hd reveal">
+      <div class="sec-hd-l">
+        <div class="kicker">§ 02 — Benchmark Leaders</div>
+        <h2>Where each model leads.</h2>
+      </div>
+      <div class="sec-hd-r">Scores from official announcements or Artificial Analysis / Arena leaderboard.</div>
+    </div>
+    <div class="bench-grid reveal" id="bench-grid">
+      <div class="loading-msg"><div class="loading-spinner"></div> Loading…</div>
+    </div>
+  </div>
+
+  <div id="panel-signatures" class="panel">
+    <div class="sec-hd reveal">
+      <div class="sec-hd-l">
+        <div class="kicker">§ 03 — Platform Signatures</div>
+        <h2>What makes each unique.</h2>
+      </div>
+      <div class="sec-hd-r">Proprietary capabilities and competitive moats that differentiate each AI platform.</div>
+    </div>
+    <div class="feat-grid reveal" id="feat-grid">
+      <div class="loading-msg"><div class="loading-spinner"></div> Loading…</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ===================================================== */
+/* DATA — loaded from data.json                          */
+/* ===================================================== */
+let MONTHS = [], PROVIDERS = [], EVENTS = [], BENCHMARKS = [], SIGNATURES = [];
+let dataLoaded = false;
+
+/* ===================================================== */
+/* TIMELINE STATE                                        */
+/* ===================================================== */
+let activeYears = new Set(['2025','2026']);
+let reversed = false;
+
+function COL_YEAR(col) {
+  // cols 0–11 = 2025 (Jan–Dec), 12+ = 2026
+  return col <= 11 ? '2025' : '2026';
+}
+
+/* ===================================================== */
+/* RENDER TIMELINE                                       */
+/* ===================================================== */
+function renderTimeline() {
+  if (!dataLoaded) return;
+  const grid = document.getElementById('timeline-grid');
+  grid.innerHTML = '';
+
+  let cols = MONTHS.map((_,i) => i).filter(c => activeYears.has(COL_YEAR(c)));
+  if (reversed) cols = [...cols].reverse();
+
+  const numCols = cols.length;
+  grid.style.gridTemplateColumns = `110px repeat(${numCols}, minmax(110px, 1fr))`;
+  grid.style.minWidth = (110 + numCols * 110) + 'px';
+
+  // header row
+  const blank = document.createElement('div');
+  blank.className = 'th';
+  grid.appendChild(blank);
+  cols.forEach(c => {
+    const h = document.createElement('div');
+    h.className = 'th' + (COL_YEAR(c) === '2026' ? ' year-26' : '');
+    h.textContent = MONTHS[c];
+    grid.appendChild(h);
+  });
+
+  // provider rows
+  PROVIDERS.forEach(prov => {
+    const rl = document.createElement('div');
+    rl.className = 'trl';
+    rl.innerHTML = `<div class="pip" style="background:${prov.color}"></div>${prov.label}`;
+    grid.appendChild(rl);
+
+    cols.forEach(col => {
+      const cell = document.createElement('div');
+      cell.className = 'tc' + (COL_YEAR(col) === '2026' ? ' year-26' : '');
+
+      const eventsHere = EVENTS.filter(e => e.provider === prov.id && e.col === col);
+      eventsHere.forEach(ev => {
+        const card = document.createElement('div');
+        card.className = `ev p-${prov.id}`;
+        const tagsHtml = ev.tags.map(t => `<span class="ev-tag">${t}</span>`).join('');
+        const tipHtml  = ev.tip.map(t => `<li>${t}</li>`).join('');
+        card.innerHTML = `
+          <div class="ev-date">${ev.date}</div>
+          <div class="ev-name">${ev.name}</div>
+          <div class="ev-tags">${tagsHtml}</div>
+          <div class="ev-tip">
+            <h4>${ev.name}</h4>
+            <ul>${tipHtml}</ul>
+          </div>
+        `;
+        cell.appendChild(card);
+      });
+
+      grid.appendChild(cell);
+    });
+  });
+}
+
+/* ===================================================== */
+/* RENDER BENCHMARKS                                     */
+/* ===================================================== */
+function renderBenchmarks() {
+  if (!dataLoaded) return;
+  const grid = document.getElementById('bench-grid');
+  grid.innerHTML = '';
+  BENCHMARKS.forEach(b => {
+    const c = document.createElement('div');
+    c.className = 'glass bench-card reveal';
+    c.innerHTML = `
+      <div class="bc-lbl">${b.lbl}</div>
+      <div class="bc-winner">${b.winner}</div>
+      <div class="bc-score">${b.score}</div>
+      ${b.hint ? `<div style="font-size:10px;color:var(--ink-4);margin-top:4px;letter-spacing:0.08em">${b.hint}</div>` : ''}
+    `;
+    grid.appendChild(c);
+    setTimeout(() => io.observe(c), 10);
+  });
+}
+
+/* ===================================================== */
+/* RENDER SIGNATURES                                     */
+/* ===================================================== */
+function renderSignatures() {
+  if (!dataLoaded) return;
+  const grid = document.getElementById('feat-grid');
+  grid.innerHTML = '';
+  SIGNATURES.forEach(s => {
+    const c = document.createElement('div');
+    c.className = 'glass feat-card reveal';
+    const itemsHtml = s.items.map(i => `<li>${i}</li>`).join('');
+    c.innerHTML = `
+      <h3><div class="pip" style="background:${s.color}"></div>${s.label}</h3>
+      <ul>${itemsHtml}</ul>
+    `;
+    grid.appendChild(c);
+    setTimeout(() => io.observe(c), 10);
+  });
+}
+
+/* ===================================================== */
+/* BUILD LEGEND                                          */
+/* ===================================================== */
+function buildLegend() {
+  const el = document.getElementById('legend');
+  el.innerHTML = '';
+  PROVIDERS.forEach(p => {
+    el.innerHTML += `<div class="legend-item"><div class="pip" style="background:${p.color}"></div>${p.label}</div>`;
+  });
+}
+
+/* ===================================================== */
+/* LOAD DATA                                             */
+/* ===================================================== */
+fetch('./data.json')
+  .then(r => {
+    if (!r.ok) throw new Error('data.json not found');
+    return r.json();
+  })
+  .then(data => {
+    MONTHS     = data.months;
+    PROVIDERS  = data.providers;
+    EVENTS     = data.events;
+    BENCHMARKS = data.benchmarks;
+    SIGNATURES = data.signatures;
+    dataLoaded = true;
+
+    // populate dynamic UI text
+    const d = data.meta.last_updated;
+    document.getElementById('badge-date').textContent = d;
+    document.getElementById('hero-coverage').textContent = data.meta.coverage;
+    document.getElementById('hero-coverage-b').textContent = data.meta.coverage;
+    document.getElementById('hero-event-count').textContent = EVENTS.length;
+
+    buildLegend();
+    renderTimeline();
+
+    // re-observe any .reveal elements inside the now-populated shell
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  })
+  .catch(err => {
+    document.getElementById('timeline-grid').innerHTML =
+      `<div class="loading-msg" style="color:var(--bad)">⚠ Could not load data.json — ${err.message}</div>`;
+  });
+
+/* ===================================================== */
+/* YEAR FILTER CHIPS                                     */
+/* ===================================================== */
+document.getElementById('yr-2025').addEventListener('click', function() {
+  const yr = '2025';
+  if (activeYears.has(yr) && activeYears.size === 1) return;
+  activeYears.has(yr) ? activeYears.delete(yr) : activeYears.add(yr);
+  this.classList.toggle('active', activeYears.has(yr));
+  renderTimeline();
+});
+document.getElementById('yr-2026').addEventListener('click', function() {
+  const yr = '2026';
+  if (activeYears.has(yr) && activeYears.size === 1) return;
+  activeYears.has(yr) ? activeYears.delete(yr) : activeYears.add(yr);
+  this.classList.toggle('active', activeYears.has(yr));
+  renderTimeline();
+});
+
+/* ===================================================== */
+/* REVERSE BUTTON                                        */
+/* ===================================================== */
+document.getElementById('btn-reverse').addEventListener('click', function() {
+  reversed = !reversed;
+  this.classList.toggle('active', reversed);
+  const textNode = [...this.childNodes].find(n => n.nodeType === 3);
+  if (textNode) textNode.textContent = reversed ? ' Oldest First' : ' Newest First';
+  renderTimeline();
+});
+
+/* ===================================================== */
+/* TABS                                                  */
+/* ===================================================== */
+const pill = document.getElementById('tab-pill');
+function moveTabPill(btn) {
+  const r  = btn.getBoundingClientRect();
+  const pr = btn.parentElement.getBoundingClientRect();
+  pill.style.left  = (r.left - pr.left) + 'px';
+  pill.style.width = r.width + 'px';
+}
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    moveTabPill(btn);
+    const tab = btn.dataset.tab;
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+    document.getElementById('panel-' + tab).querySelectorAll('.reveal').forEach(el => {
+      el.classList.remove('in');
+      setTimeout(() => el.classList.add('in'), 50);
+    });
+    if (tab === 'benchmarks') renderBenchmarks();
+    if (tab === 'signatures') renderSignatures();
+  });
+});
+requestAnimationFrame(() => moveTabPill(document.querySelector('.tab.active')));
+window.addEventListener('resize', () => moveTabPill(document.querySelector('.tab.active')));
+
+/* ===================================================== */
+/* SCROLL REVEAL                                         */
+/* ===================================================== */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ===================================================== */
+/* MAGNETIC BUTTONS                                      */
+/* ===================================================== */
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('pointermove', e => {
+    const r = btn.getBoundingClientRect();
+    btn.style.transform = `translate(${(e.clientX - r.left - r.width/2) * 0.15}px, ${(e.clientY - r.top - r.height/2) * 0.15}px)`;
+  });
+  btn.addEventListener('pointerleave', () => { btn.style.transform = ''; });
+});
+</script>
+</body>
+</html>
