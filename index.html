@@ -476,14 +476,14 @@
     <!-- timeline controls -->
     <div class="tl-controls reveal">
       <span class="ctrl-lbl">Year:</span>
-      <button class="ctrl-chip active" id="yr-2025" data-yr="2025">2025</button>
+      <button class="ctrl-chip" id="yr-2025" data-yr="2025">2025</button>
       <button class="ctrl-chip active" id="yr-2026" data-yr="2026">2026</button>
       <div class="ctrl-sep"></div>
-      <button class="ctrl-chip rev" id="btn-reverse">
+      <button class="ctrl-chip rev active" id="btn-reverse">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
           <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        Newest First
+        Oldest First
       </button>
     </div>
 
@@ -1510,8 +1510,8 @@ const SIGNATURES = [
 /* ===================================================== */
 /* TIMELINE STATE                                         */
 /* ===================================================== */
-let activeYears = new Set(['2025','2026']);
-let reversed = false;
+let activeYears = new Set(['2026']);
+let reversed = true;
 
 // col 0–11 = 2025, col 12–15 = 2026
 const COL_YEAR = col => col <= 11 ? '2025' : '2026';
