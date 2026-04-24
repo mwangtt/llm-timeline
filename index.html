@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LLM Platform Evolution — 2025–2026</title>
+<title>LLM Platform Evolution — 2025–Apr 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
+    /* ── light theme tokens ── */
     --ink:      #1a2332;
     --ink-2:    rgba(26,35,50,0.72);
     --ink-3:    rgba(26,35,50,0.50);
@@ -24,6 +25,8 @@
     --stroke-lo:rgba(26,35,50,0.07);
     --radius:   22px;
     --radius-sm:14px;
+
+    /* provider colors */
     --openai:    #2b8fd4;
     --gemini:    #1ea868;
     --claude:    #d4601a;
@@ -45,6 +48,7 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* ── light background ── */
   .bg {
     position: fixed; inset: 0; z-index: 0; pointer-events: none;
     background:
@@ -52,15 +56,18 @@
       radial-gradient(700px 500px at 100% 20%, rgba(200,230,250,0.4), transparent 65%),
       linear-gradient(180deg, #e8eef5 0%, #f0f4f8 50%, #eef2f7 100%);
   }
+  .bg::before { display: none; }
   .bg::after {
     content: '';
     position: absolute; inset: 0;
     background-image: radial-gradient(circle at 1px 1px, rgba(26,35,50,0.055) 1px, transparent 1.2px);
     background-size: 28px 28px;
+    opacity: 1;
   }
   .noise { display: none; }
   .cursor-glow { display: none; }
 
+  /* ── layout ── */
   .shell {
     position: relative; z-index: 2;
     max-width: 100%;
@@ -68,6 +75,7 @@
     padding: 36px 48px 120px;
   }
 
+  /* ── top bar ── */
   .topbar {
     display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 40px;
@@ -99,8 +107,8 @@
     background: var(--good); box-shadow: 0 0 6px var(--good);
     animation: pulse 1.6s ease-in-out infinite;
   }
-  #badge-date { font-style: italic; color: var(--ink-3); margin-left: 4px; }
 
+  /* ── hero ── */
   .hero {
     display: grid;
     grid-template-columns: 1.5fr 1fr;
@@ -138,6 +146,7 @@
 
   @keyframes pulse { 0%,100%{ opacity:1; transform: scale(1); } 50%{ opacity: 0.5; transform: scale(1.4); } }
 
+  /* ── tabs ── */
   .tabs {
     display: flex; gap: 6px; padding: 6px;
     border-radius: 999px;
@@ -161,6 +170,7 @@
     z-index: 1;
   }
 
+  /* ── glass card (light) ── */
   .glass {
     background: white;
     border: 1px solid var(--stroke);
@@ -168,15 +178,20 @@
     position: relative; overflow: hidden;
     box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
   }
+  .glass::before { display: none; }
+  .glass::after { display: none; }
   .glass > * { position: relative; z-index: 1; }
 
+  /* ── panels ── */
   .panel { display: none; }
   .panel.active { display: block; animation: fadein 0.5s ease; }
   @keyframes fadein { from{ opacity:0; transform: translateY(10px); } to{ opacity:1; transform: translateY(0); } }
 
+  /* ── reveals ── */
   .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(.2,.8,.2,1); }
   .reveal.in { opacity: 1; transform: translateY(0); }
 
+  /* ── section header ── */
   .sec-hd {
     display: flex; justify-content: space-between; align-items: flex-end;
     margin: 52px 0 20px;
@@ -189,20 +204,24 @@
   .sec-hd-l h2 { font-size: clamp(28px, 3.5vw, 42px); font-weight: 700; letter-spacing: -0.02em; margin: 0; line-height: 1.05; color: var(--ink); }
   .sec-hd-r { font-size: 12px; color: var(--ink-3); max-width: 36ch; line-height: 1.5; text-align: right; }
 
+  /* ── TIMELINE ── */
   .timeline-outer {
     overflow-x: auto;
     padding-bottom: 8px;
     margin-bottom: 4px;
   }
   .timeline-outer::-webkit-scrollbar { height: 6px; }
-  .timeline-outer::-webkit-scrollbar-thumb { background: rgba(26,35,50,0.12); border-radius: 999px; }
+  .timeline-outer::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 999px; }
   .timeline-outer::-webkit-scrollbar-track { background: transparent; }
 
   .timeline-grid {
     display: grid;
+    grid-template-columns: 110px repeat(16, minmax(100px, 1fr));
+    min-width: 1500px;
     gap: 0;
   }
 
+  /* month header cells */
   .th {
     text-align: center;
     font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
@@ -216,6 +235,7 @@
   .th:first-child { background: #f7f9fc; border-right: none; }
   .th.year-26 { color: var(--accent); }
 
+  /* row label */
   .trl {
     display: flex; align-items: center;
     font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
@@ -226,8 +246,11 @@
     background: #f7f9fc;
     position: sticky; left: 0; z-index: 2;
   }
-  .trl .pip { width: 8px; height: 8px; border-radius: 999px; margin-right: 8px; flex-shrink: 0; }
+  .trl .pip {
+    width: 8px; height: 8px; border-radius: 999px; margin-right: 8px; flex-shrink: 0;
+  }
 
+  /* grid cells */
   .tc {
     border-right: 1px solid var(--stroke-lo);
     border-bottom: 1px solid var(--stroke-lo);
@@ -237,7 +260,9 @@
     transition: background 0.2s;
   }
   .tc:last-child { border-right: none; }
+  .tc.year-26 { }
 
+  /* event card */
   .ev {
     border-radius: 10px;
     padding: 7px 9px;
@@ -252,6 +277,7 @@
   .ev-tags { display: flex; flex-wrap: wrap; gap: 2px; margin-top: 4px; }
   .ev-tag { font-size: 9px; padding: 1px 5px; border-radius: 8px; font-weight: 600; opacity: 0.85; }
 
+  /* tooltip */
   .ev-tip {
     display: none;
     position: absolute; left: calc(100% + 10px); top: 0;
@@ -264,6 +290,7 @@
     box-shadow: 0 12px 40px rgba(0,0,0,0.4);
     z-index: 200;
     font-size: 12px; line-height: 1.5;
+    backdrop-filter: blur(20px);
     pointer-events: none;
   }
   .ev:hover .ev-tip { display: block; }
@@ -271,6 +298,7 @@
   .ev-tip ul { padding-left: 14px; color: var(--ink-2); margin: 0; }
   .ev-tip ul li { margin-bottom: 4px; }
 
+  /* provider color themes — light */
   .p-openai    { background: rgba(43,143,212,0.09); border-left: 3px solid var(--openai); }
   .p-openai .ev-name { color: #1565a8; }
   .p-openai .ev-tag  { background: rgba(43,143,212,0.14); color: #1565a8; }
@@ -295,6 +323,7 @@
   .p-perplexity .ev-name { color: #1e5a98; }
   .p-perplexity .ev-tag  { background: rgba(58,122,184,0.14); color: #1e5a98; }
 
+  /* ── BENCHMARKS ── */
   .bench-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -310,6 +339,7 @@
   .bench-card .bc-winner { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px; line-height: 1.2; }
   .bench-card .bc-score { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: var(--accent); }
 
+  /* ── SIGNATURES ── */
   .feat-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -326,6 +356,7 @@
   .feat-card ul li { margin-bottom: 6px; line-height: 1.5; }
   .feat-card ul li strong { color: var(--ink); font-weight: 700; }
 
+  /* ── LEGEND ── */
   .legend {
     display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px;
   }
@@ -334,14 +365,19 @@
     font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
     color: var(--ink-3);
     padding: 5px 12px; border-radius: 999px;
-    background: white; border: 1px solid var(--stroke);
+    background: var(--glass-lo); border: 1px solid var(--stroke-lo);
   }
   .legend-item .pip { width: 8px; height: 8px; border-radius: 999px; flex-shrink: 0; }
 
+  /* ── scrollbar ── */
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-thumb { background: rgba(26,35,50,0.18); border-radius: 999px; }
   ::-webkit-scrollbar-track { background: transparent; }
 
+  /* ── legend items ── */
+  .legend-item { background: white; border: 1px solid var(--stroke); color: var(--ink-3); }
+
+  /* ── timeline filter bar ── */
   .tl-controls {
     display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
     margin-bottom: 16px;
@@ -366,21 +402,6 @@
   .ctrl-chip.rev svg { transition: transform 0.3s ease; }
   .ctrl-chip.rev.active svg { transform: scaleX(-1); }
 
-  /* loading state */
-  .loading-msg {
-    display: flex; align-items: center; justify-content: center;
-    min-height: 200px; color: var(--ink-3);
-    font-size: 13px; font-weight: 600; letter-spacing: 0.08em;
-    gap: 12px;
-  }
-  .loading-spinner {
-    width: 18px; height: 18px; border-radius: 999px;
-    border: 2px solid var(--stroke);
-    border-top-color: var(--accent);
-    animation: spin 0.7s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; }
     .bench-grid { grid-template-columns: repeat(2,1fr); }
@@ -391,9 +412,12 @@
 </head>
 <body>
 <div class="bg"></div>
+<div class="noise"></div>
+<div class="cursor-glow"></div>
 
 <div class="shell">
 
+  <!-- top bar -->
   <div class="topbar">
     <div class="brand">
       <div class="brand-mark"></div>
@@ -401,25 +425,34 @@
     </div>
     <div class="topbadge">
       <div class="dot"></div>
-      Data through <span id="badge-date">loading…</span>
+      Data through Apr 24, 2026
     </div>
   </div>
 
+  <!-- hero -->
   <section class="hero reveal">
     <div>
       <div class="hero-kicker">GEO Research Reference</div>
       <h1>LLM Platform<br><em>Evolution</em></h1>
-      <p class="hero-sub">Model releases, capability shifts, and competitive positioning across OpenAI, Google, Anthropic, and Perplexity — <span id="hero-coverage">loading…</span></p>
-      <div class="legend" id="legend"></div>
+      <p class="hero-sub">Model releases, capability shifts, and competitive positioning across OpenAI, Google, Anthropic, DeepSeek, and Perplexity — Jan 2025 through Apr 2026.</p>
+      <div class="legend">
+        <div class="legend-item"><div class="pip" style="background:var(--openai)"></div>OpenAI / ChatGPT</div>
+        <div class="legend-item"><div class="pip" style="background:var(--gemini)"></div>Google Gemini</div>
+        <div class="legend-item"><div class="pip" style="background:var(--claude)"></div>Anthropic Claude</div>
+        <div class="legend-item"><div class="pip" style="background:var(--aimode)"></div>Google AI Mode</div>
+        <div class="legend-item"><div class="pip" style="background:var(--aioverview)"></div>AI Overviews</div>
+        <div class="legend-item"><div class="pip" style="background:var(--perplexity)"></div>Perplexity</div>
+      </div>
     </div>
     <div class="hero-meta">
       <div class="tag"><span class="dot"></span> 6 Platforms Tracked</div>
-      <div class="line"><b id="hero-event-count">–</b> major releases indexed</div>
-      <div class="line">Coverage: <b id="hero-coverage-b">loading…</b></div>
+      <div class="line"><b>44 major releases</b> indexed across all providers</div>
+      <div class="line">Coverage: <b>Jan 2025 → Apr 2026</b></div>
       <div class="line">Benchmarks: <b>Arena · SWE-bench · GPQA · ARC-AGI-2</b></div>
     </div>
   </section>
 
+  <!-- tabs -->
   <div class="tabs" id="tabs">
     <button class="tab active" data-tab="timeline">Timeline</button>
     <button class="tab" data-tab="benchmarks">Benchmarks</button>
@@ -427,15 +460,20 @@
     <div class="tab-pill" id="tab-pill"></div>
   </div>
 
+  <!-- ======================================================= -->
+  <!-- TIMELINE PANEL                                           -->
+  <!-- ======================================================= -->
   <div id="panel-timeline" class="panel active">
+
     <div class="sec-hd reveal">
       <div class="sec-hd-l">
         <div class="kicker">§ 01 — Release Timeline</div>
         <h2>Every major drop, in one grid.</h2>
       </div>
-      <div class="sec-hd-r">Hover any card for benchmark details and capability notes. Scroll horizontally to navigate months.</div>
+      <div class="sec-hd-r">Hover any card for benchmark details and capability notes. Scroll horizontally across 15 months.</div>
     </div>
 
+    <!-- timeline controls -->
     <div class="tl-controls reveal">
       <span class="ctrl-lbl">Year:</span>
       <button class="ctrl-chip active" id="yr-2025" data-yr="2025">2025</button>
@@ -452,29 +490,37 @@
     <div class="glass reveal" style="padding: 0; overflow: hidden;">
       <div class="timeline-outer" id="timeline-outer">
         <div class="timeline-grid" id="timeline-grid">
-          <div class="loading-msg">
-            <div class="loading-spinner"></div>
-            Loading timeline data…
-          </div>
+          <!-- rendered by JS -->
         </div>
       </div>
     </div>
+
   </div>
 
+  <!-- ======================================================= -->
+  <!-- BENCHMARKS PANEL                                         -->
+  <!-- ======================================================= -->
   <div id="panel-benchmarks" class="panel">
+
     <div class="sec-hd reveal">
       <div class="sec-hd-l">
         <div class="kicker">§ 02 — Benchmark Leaders</div>
         <h2>Where each model leads.</h2>
       </div>
-      <div class="sec-hd-r">Scores from official announcements or Artificial Analysis / Arena leaderboard.</div>
+      <div class="sec-hd-r">Scores as of March 2026. All figures from official announcements or Artificial Analysis / Arena leaderboard.</div>
     </div>
+
     <div class="bench-grid reveal" id="bench-grid">
-      <div class="loading-msg"><div class="loading-spinner"></div> Loading…</div>
+      <!-- rendered by JS -->
     </div>
+
   </div>
 
+  <!-- ======================================================= -->
+  <!-- PLATFORM SIGNATURES PANEL                                -->
+  <!-- ======================================================= -->
   <div id="panel-signatures" class="panel">
+
     <div class="sec-hd reveal">
       <div class="sec-hd-l">
         <div class="kicker">§ 03 — Platform Signatures</div>
@@ -482,39 +528,1002 @@
       </div>
       <div class="sec-hd-r">Proprietary capabilities and competitive moats that differentiate each AI platform.</div>
     </div>
+
     <div class="feat-grid reveal" id="feat-grid">
-      <div class="loading-msg"><div class="loading-spinner"></div> Loading…</div>
+      <!-- rendered by JS -->
     </div>
+
   </div>
 
-</div>
+</div><!-- /shell -->
 
 <script>
 /* ===================================================== */
-/* DATA — loaded from data.json                          */
+/* DATA                                                  */
 /* ===================================================== */
-let MONTHS = [], PROVIDERS = [], EVENTS = [], BENCHMARKS = [], SIGNATURES = [];
-let dataLoaded = false;
+const MONTHS = ["Jan '25","Feb '25","Mar '25","Apr '25","May '25","Jun '25","Jul '25","Aug '25","Sep '25","Oct '25","Nov '25","Dec '25","Jan '26","Feb '26","Mar '26","Apr '26"];
+
+const PROVIDERS = [
+  {
+    "id": "openai",
+    "label": "OpenAI",
+    "color": "#2b8fd4"
+  },
+  {
+    "id": "gemini",
+    "label": "Gemini",
+    "color": "#1ea868"
+  },
+  {
+    "id": "claude",
+    "label": "Claude",
+    "color": "#d4601a"
+  },
+  {
+    "id": "aimode",
+    "label": "AI Mode",
+    "color": "#6a52c8"
+  },
+  {
+    "id": "aioverview",
+    "label": "AI Overviews",
+    "color": "#c08010"
+  },
+  {
+    "id": "perplexity",
+    "label": "Perplexity",
+    "color": "#3a7ab8"
+  }
+];
+
+const EVENTS = [
+  {
+    "provider": "openai",
+    "col": 0,
+    "date": "Jan 31",
+    "name": "o3-mini",
+    "tags": [
+      "reasoning",
+      "3 effort levels"
+    ],
+    "tip": [
+      "Low/medium/high reasoning effort selector",
+      "AIME 2024: 87.3%, GPQA: 79.7%",
+      "SWE-bench Verified: 49.3%",
+      "Codeforces Elo: 2130"
+    ]
+  },
+  {
+    "provider": "openai",
+    "col": 1,
+    "date": "Feb 27",
+    "name": "GPT-4.5",
+    "tags": [
+      "non-CoT",
+      "humanlike"
+    ],
+    "tip": [
+      "Last non-chain-of-thought GPT model",
+      "Better subtext understanding, ~20% info extraction gain",
+      "Outperforms GPT-4o on multilingual MMLU"
+    ]
+  },
+  {
+    "provider": "openai",
+    "col": 1,
+    "date": "Feb",
+    "name": "Deep Research",
+    "tags": [
+      "agents",
+      "web+reasoning"
+    ],
+    "tip": [
+      "o3 + web search for autonomous multi-step research",
+      "27% on Humanity's Last Exam",
+      "Pro users only initially"
+    ]
+  },
+  {
+    "provider": "openai",
+    "col": 2,
+    "date": "Mar",
+    "name": "GPT Image 1",
+    "tags": [
+      "image gen"
+    ],
+    "tip": [
+      "Native multimodal image gen on GPT-4o architecture",
+      "Replaced DALL-E 3 in ChatGPT"
+    ]
+  },
+  {
+    "provider": "openai",
+    "col": 3,
+    "date": "Apr 14",
+    "name": "GPT-4.1 family",
+    "tags": [
+      "coding",
+      "mini/nano"
+    ],
+    "tip": [
+      "Coding-focused improvements",
+      "4.1 mini replaced 4o mini as default",
+      "API-first; ChatGPT rollout May 14"
+    ]
+  },
+  {
+    "provider": "openai",
+    "col": 3,
+    "date": "Apr 16",
+    "name": "o3 + o4-mini",
+    "tags": [
+      "reasoning",
+      "multimodal CoT"
+    ],
+    "tip": [
+      "o3: GPQA 87.7%, SWE-bench 71.7%, Elo 2727",
+      "o4-mini: processes images in chain-of-thought",
+      "ARC-AGI: 3× accuracy of o1"
+    ]
+  },
+  {
+    "provider": "openai",
+    "col": 5,
+    "date": "Jun 10",
+    "name": "o3-pro",
+    "tags": [
+      "high compute"
+    ],
+    "tip": [
+      "Higher-compute o3 variant for enhanced accuracy",
+      "Pro and Plus subscribers only"
+    ]
+  },
+  {
+    "provider": "openai",
+    "col": 6,
+    "date": "Jul",
+    "name": "ChatGPT Agent",
+    "tags": [
+      "agentic"
+    ],
+    "tip": [
+      "Multi-step autonomous task performer",
+      "Web browsing + info gathering + summarization"
+    ]
+  },
+  {
+    "provider": "openai",
+    "col": 7,
+    "date": "Aug 7",
+    "name": "GPT-5 + mini",
+    "tags": [
+      "native multimodal",
+      "auto router"
+    ],
+    "tip": [
+      "Text + vision trained together from scratch",
+      "Auto-selects fast vs. reasoning mode",
+      "Agentic: sets up desktop env, browses web",
+      "Multiple reasoning tiers (minimal → xhigh)"
+    ]
+  },
+  {
+    "provider": "openai",
+    "col": 9,
+    "date": "Oct",
+    "name": "ChatGPT Atlas",
+    "tags": [
+      "browser",
+      "agentic"
+    ],
+    "tip": [
+      "AI-integrated web browser",
+      "Autonomous online navigation mode"
+    ]
+  },
+  {
+    "provider": "openai",
+    "col": 10,
+    "date": "Nov 12",
+    "name": "GPT-5.1",
+    "tags": [
+      "personality"
+    ],
+    "tip": [
+      "Customizable personality selection"
+    ]
+  },
+  {
+    "provider": "openai",
+    "col": 11,
+    "date": "Dec 11",
+    "name": "GPT-5.2",
+    "tags": [
+      "iterative"
+    ],
+    "tip": [
+      "Iterative update to GPT-5 family"
+    ]
+  },
+  {
+    "provider": "openai",
+    "col": 13,
+    "date": "Feb 5",
+    "name": "GPT-5.3-Codex",
+    "tags": [
+      "coding"
+    ],
+    "tip": [
+      "Specialized for software development"
+    ]
+  },
+  {
+    "provider": "openai",
+    "col": 14,
+    "date": "Mar 3",
+    "name": "GPT-5.3-Instant",
+    "tags": [
+      "speed"
+    ],
+    "tip": [
+      "General-purpose rapid-response variant"
+    ]
+  },
+  {
+    "provider": "openai",
+    "col": 14,
+    "date": "Mar 5",
+    "name": "GPT-5.4",
+    "tags": [
+      "current",
+      "AI Index #1"
+    ],
+    "tip": [
+      "Professional work + computer use focus",
+      "Tied #1 Artificial Analysis Intelligence Index (57)"
+    ]
+  },
+  {
+    "provider": "openai",
+    "col": 15,
+    "date": "Apr 23",
+    "name": "GPT-5.5",
+    "tags": [
+      "super app",
+      "current"
+    ],
+    "tip": [
+      "Released Apr 23, 2026",
+      "One step closer to an AI super app",
+      "Expanded capabilities and deeper cross-platform integration"
+    ]
+  },
+  {
+    "provider": "gemini",
+    "col": 1,
+    "date": "Feb 5",
+    "name": "2.0 Flash GA + Pro Exp",
+    "tags": [
+      "multimodal",
+      "realtime"
+    ],
+    "tip": [
+      "Agentic era flagship; real-time audio/video API",
+      "Native image gen + TTS with SynthID watermark",
+      "Flash-Lite: cost/speed optimized budget tier"
+    ]
+  },
+  {
+    "provider": "gemini",
+    "col": 2,
+    "date": "Mar 25",
+    "name": "Gemini 2.5 Pro",
+    "tags": [
+      "thinking model",
+      "#1 arena"
+    ],
+    "tip": [
+      "First explicit thinking model from Google",
+      "Debuted #1 on LMArena by ~40 points",
+      "Gold-medal level on IMO math competition"
+    ]
+  },
+  {
+    "provider": "gemini",
+    "col": 3,
+    "date": "Apr 17",
+    "name": "Gemini 2.5 Flash",
+    "tags": [
+      "speed",
+      "price-perf"
+    ],
+    "tip": [
+      "Speed-optimized thinking model",
+      "Best price-performance on reasoning tasks"
+    ]
+  },
+  {
+    "provider": "gemini",
+    "col": 4,
+    "date": "May 20 (I/O)",
+    "name": "2.5 Pro/Flash GA",
+    "tags": [
+      "audio output",
+      "400M users"
+    ],
+    "tip": [
+      "2.5 Pro + Flash confirmed default across products",
+      "Native audio output added",
+      "400M monthly active users"
+    ]
+  },
+  {
+    "provider": "gemini",
+    "col": 5,
+    "date": "Jun 17",
+    "name": "2.5 Flash-Lite GA",
+    "tags": [
+      "efficiency"
+    ],
+    "tip": [
+      "Fastest + most cost-efficient in 2.5 series"
+    ]
+  },
+  {
+    "provider": "gemini",
+    "col": 7,
+    "date": "Aug 26",
+    "name": "Nano Banana (image)",
+    "tags": [
+      "viral",
+      "image edit"
+    ],
+    "tip": [
+      "Viral image generation/editing model",
+      "+10M new users in weeks",
+      "200M+ image edits in first weeks"
+    ]
+  },
+  {
+    "provider": "gemini",
+    "col": 10,
+    "date": "Nov 18",
+    "name": "Gemini 3 Pro",
+    "tags": [
+      "MoE",
+      "64K output"
+    ],
+    "tip": [
+      "Sparse mixture-of-experts architecture",
+      "64K token output",
+      "750M MAU by Feb 2026"
+    ]
+  },
+  {
+    "provider": "gemini",
+    "col": 11,
+    "date": "Dec 3",
+    "name": "Gemini 3 Deep Think",
+    "tags": [
+      "reasoning",
+      "IMO gold"
+    ],
+    "tip": [
+      "IMO gold-medal standard math reasoning",
+      "Full CoT summary shown to users",
+      "Ultra subscribers only"
+    ]
+  },
+  {
+    "provider": "gemini",
+    "col": 11,
+    "date": "Dec 17",
+    "name": "Gemini 3 Flash",
+    "tags": [
+      "frontier speed"
+    ],
+    "tip": [
+      "Frontier-class at reduced cost",
+      "Replaced 2.5 Flash"
+    ]
+  },
+  {
+    "provider": "gemini",
+    "col": 13,
+    "date": "Feb 19",
+    "name": "Gemini 3.1 Pro",
+    "tags": [
+      "SOTA benchmarks",
+      "AI Index #1"
+    ],
+    "tip": [
+      "ARC-AGI-2: 77.1%",
+      "SWE-Bench: 80.6%",
+      "GPQA Diamond: 94.3%",
+      "1M input / 64K output tokens",
+      "Tied #1 AI Index (score 57)"
+    ]
+  },
+  {
+    "provider": "gemini",
+    "col": 14,
+    "date": "Mar 3",
+    "name": "Gemini 3.1 Flash-Lite",
+    "tags": [
+      "scalable"
+    ],
+    "tip": [
+      "Intelligence optimized for scalable deployment",
+      "API-first release"
+    ]
+  },
+  {
+    "provider": "gemini",
+    "col": 15,
+    "date": "Apr 2",
+    "name": "Gemma 4",
+    "tags": [
+      "open model",
+      "MoE",
+      "256K ctx"
+    ],
+    "tip": [
+      "Released Apr 2, 2026 — Apache 2.0 open weights",
+      "4 sizes: E2B/E4B edge + 26B MoE + 31B dense",
+      "256K context; multimodal (image, audio, video)",
+      "31B IT: AIME 2026 89.2%, GPQA Diamond 84.3%, Arena 1452"
+    ]
+  },
+  {
+    "provider": "gemini",
+    "col": 15,
+    "date": "Apr 22",
+    "name": "Gemini 3.1 Flash TTS",
+    "tags": [
+      "speech synthesis",
+      "Cloud Next '26"
+    ],
+    "tip": [
+      "Announced at Google Cloud Next '26 (Apr 22–23)",
+      "Next-gen expressive AI speech synthesis"
+    ]
+  },
+  {
+    "provider": "gemini",
+    "col": 15,
+    "date": "Apr 22",
+    "name": "Gemini Robotics-ER 1.6",
+    "tags": [
+      "robotics",
+      "embodied AI"
+    ],
+    "tip": [
+      "Announced at Google Cloud Next '26",
+      "Enhanced embodied reasoning for real-world robotics tasks"
+    ]
+  },
+  {
+    "provider": "claude",
+    "col": 1,
+    "date": "Feb 24",
+    "name": "Claude 3.7 Sonnet",
+    "tags": [
+      "extended thinking",
+      "SWE #1"
+    ],
+    "tip": [
+      "First visible, controllable chain-of-thought",
+      "Thinking budget up to 128K tokens",
+      "SWE-bench: 70.3% (with scaffolding)",
+      "Launched Claude Code preview"
+    ]
+  },
+  {
+    "provider": "claude",
+    "col": 4,
+    "date": "May 22",
+    "name": "Sonnet 4 + Opus 4",
+    "tags": [
+      "L3 safety",
+      "7hr coding"
+    ],
+    "tip": [
+      "Opus 4: Level 3 safety classification",
+      "Coded 7+ hours straight in benchmarks",
+      "Claude Code became GA"
+    ]
+  },
+  {
+    "provider": "claude",
+    "col": 7,
+    "date": "Aug 5",
+    "name": "Opus 4.1",
+    "tags": [
+      "conversation end"
+    ],
+    "tip": [
+      "Can terminate conversations when persistently abused"
+    ]
+  },
+  {
+    "provider": "claude",
+    "col": 8,
+    "date": "Sep 29",
+    "name": "Sonnet 4.5",
+    "tags": [
+      "best coding",
+      "Jul '25 cutoff"
+    ],
+    "tip": [
+      "Knowledge cutoff: July 2025",
+      "Probably the best coding model — Simon Willison"
+    ]
+  },
+  {
+    "provider": "claude",
+    "col": 9,
+    "date": "Oct 15–20",
+    "name": "Haiku 4.5 + Code async",
+    "tags": [
+      "mobile",
+      "background tasks"
+    ],
+    "tip": [
+      "Haiku 4.5: fast, cost-effective, available on mobile",
+      "Claude Code async: web-based background coding agent"
+    ]
+  },
+  {
+    "provider": "claude",
+    "col": 10,
+    "date": "Nov 24",
+    "name": "Opus 4.5",
+    "tags": [
+      "infinite chats",
+      "spreadsheets"
+    ],
+    "tip": [
+      "Infinite Chats — no context window limit errors",
+      "Enhanced coding and workplace automation"
+    ]
+  },
+  {
+    "provider": "claude",
+    "col": 11,
+    "date": "Dec 9",
+    "name": "MCP Open Source",
+    "tags": [
+      "open protocol"
+    ],
+    "tip": [
+      "Anthropic donated Model Context Protocol",
+      "Founded Agentic AI Foundation"
+    ]
+  },
+  {
+    "provider": "claude",
+    "col": 13,
+    "date": "Feb 5",
+    "name": "Opus 4.6",
+    "tags": [
+      "arena #1",
+      "14.5hr tasks"
+    ],
+    "tip": [
+      "Arena Leaderboard #1 (score 1504, thinking mode)",
+      "Max task horizon: 14.5 hours at 50% success",
+      "Manages teams of AI sub-agents"
+    ]
+  },
+  {
+    "provider": "claude",
+    "col": 13,
+    "date": "Feb 17",
+    "name": "Sonnet 4.6",
+    "tags": [
+      "Jan '26 cutoff",
+      "scale"
+    ],
+    "tip": [
+      "Frontier performance at scale, same price as 4.5",
+      "Knowledge cutoff: Jan 2026"
+    ]
+  },
+  {
+    "provider": "claude",
+    "col": 15,
+    "date": "Apr 16",
+    "name": "Claude Opus 4.7",
+    "tags": [
+      "coding",
+      "vision",
+      "current"
+    ],
+    "tip": [
+      "13% improvement on coding benchmarks vs Opus 4.6",
+      "Vision: accepts images up to 2,576px (3× prior resolution)",
+      "New xhigh effort level",
+      "Same pricing: $5/M input, $25/M output tokens"
+    ]
+  },
+  {
+    "provider": "claude",
+    "col": 15,
+    "date": "Apr 17",
+    "name": "Claude Design",
+    "tags": [
+      "visual creation",
+      "Anthropic Labs"
+    ],
+    "tip": [
+      "New collaborative tool from Anthropic Labs",
+      "Creates polished designs, prototypes, slides, one-pagers"
+    ]
+  },
+  {
+    "provider": "aimode",
+    "col": 2,
+    "date": "Mar",
+    "name": "AI Mode Launch",
+    "tags": [
+      "Search Labs",
+      "conversational"
+    ],
+    "tip": [
+      "Experimental in Search Labs / Google One AI Premium",
+      "Full conversational search replacement",
+      "Handles complex multi-part queries",
+      "Powered by Gemini 2.0+"
+    ]
+  },
+  {
+    "provider": "aimode",
+    "col": 4,
+    "date": "May",
+    "name": "Broader Rollout",
+    "tags": [
+      "expansion"
+    ],
+    "tip": [
+      "Wider rollout within Google Search ecosystem"
+    ]
+  },
+  {
+    "provider": "aimode",
+    "col": 14,
+    "date": "Mar",
+    "name": "Canvas + Nano Banana 2",
+    "tags": [
+      "image gen",
+      "canvas"
+    ],
+    "tip": [
+      "Creative canvas workspace added",
+      "Nano Banana 2 image gen integrated"
+    ]
+  },
+  {
+    "provider": "aioverview",
+    "col": 0,
+    "date": "Oct '24 → Jan",
+    "name": "100+ Countries",
+    "tags": [
+      "global"
+    ],
+    "tip": [
+      "Available in 100+ countries as of Oct 2024",
+      "67% desktop / 75% mobile screen SERP space"
+    ]
+  },
+  {
+    "provider": "aioverview",
+    "col": 1,
+    "date": "Feb",
+    "name": "Legal Challenge (Chegg)",
+    "tags": [
+      "legal"
+    ],
+    "tip": [
+      "Chegg sued Alphabet over AI Overviews reducing student traffic"
+    ]
+  },
+  {
+    "provider": "aioverview",
+    "col": 4,
+    "date": "May",
+    "name": "200+ Countries, 40+ Languages",
+    "tags": [
+      "200 countries"
+    ],
+    "tip": [
+      "200+ countries, 40+ languages"
+    ]
+  },
+  {
+    "provider": "aioverview",
+    "col": 8,
+    "date": "Sep",
+    "name": "Publisher Lawsuit",
+    "tags": [
+      "legal"
+    ],
+    "tip": [
+      "Penske Media (Rolling Stone, Hollywood Reporter) sued Google",
+      "Content reuse + traffic reduction claims"
+    ]
+  },
+  {
+    "provider": "aioverview",
+    "col": 12,
+    "date": "Jan",
+    "name": "Health Query Restrictions",
+    "tags": [
+      "policy"
+    ],
+    "tip": [
+      "Restricted AI Overviews on health queries",
+      "Following Guardian investigation into harmful outputs"
+    ]
+  },
+  {
+    "provider": "perplexity",
+    "col": 0,
+    "date": "Jan 23",
+    "name": "Perplexity Assistant",
+    "tags": [
+      "multi-app",
+      "camera"
+    ],
+    "tip": [
+      "Multi-app task execution (rides, music, calendar)",
+      "Phone camera for real-world queries"
+    ]
+  },
+  {
+    "provider": "perplexity",
+    "col": 1,
+    "date": "Feb 12",
+    "name": "Sonar Models",
+    "tags": [
+      "web grounded",
+      "Llama 3.3"
+    ],
+    "tip": [
+      "Sonar / Sonar Pro / Sonar Reasoning Pro / Deep Research",
+      "Built-in web grounding for all tiers"
+    ]
+  },
+  {
+    "provider": "perplexity",
+    "col": 6,
+    "date": "Jul",
+    "name": "Comet Browser (Pro)",
+    "tags": [
+      "AI browser"
+    ],
+    "tip": [
+      "AI-powered Chromium browser",
+      "Article summarization + research built-in"
+    ]
+  },
+  {
+    "provider": "perplexity",
+    "col": 9,
+    "date": "Oct 2",
+    "name": "Comet Free + Background",
+    "tags": [
+      "free release"
+    ],
+    "tip": [
+      "Free public download",
+      "Background assistant for Max subscribers"
+    ]
+  },
+  {
+    "provider": "perplexity",
+    "col": 10,
+    "date": "Nov 6",
+    "name": "Snap Partnership",
+    "tags": [
+      "$400M",
+      "Snapchat"
+    ],
+    "tip": [
+      "Powers search inside Snapchat",
+      "Reported $400M deal"
+    ]
+  },
+  {
+    "provider": "perplexity",
+    "col": 12,
+    "date": "Jan",
+    "name": "Azure Partnership",
+    "tags": [
+      "$750M",
+      "3yr GPU"
+    ],
+    "tip": [
+      "3-year, $750M GPU capacity commitment",
+      "Powers Deep Research + Model Council"
+    ]
+  },
+  {
+    "provider": "perplexity",
+    "col": 13,
+    "date": "Feb 5–27",
+    "name": "Model Council + Perplexity Computer",
+    "tags": [
+      "multi-model"
+    ],
+    "tip": [
+      "Compare outputs from multiple frontier LLMs side-by-side",
+      "Subscription-first model; discontinued AI ads"
+    ]
+  },
+  {
+    "provider": "perplexity",
+    "col": 15,
+    "date": "Apr 24",
+    "name": "DeepSeek new model (preview)",
+    "tags": [
+      "frontier gap",
+      "open"
+    ],
+    "tip": [
+      "Previewed Apr 24, 2026 (source: TechCrunch)",
+      "Described as closing the gap with frontier models",
+      "Full benchmarks not yet published"
+    ]
+  }
+];
+
+const BENCHMARKS = [
+  {
+    "lbl": "Arena Leaderboard (Overall)",
+    "winner": "Claude Opus 4.7",
+    "score": "1504+",
+    "hint": "thinking mode"
+  },
+  {
+    "lbl": "ARC-AGI-2 (General Reasoning)",
+    "winner": "Gemini 3.1 Pro",
+    "score": "77.1%",
+    "hint": ""
+  },
+  {
+    "lbl": "SWE-Bench Verified (Coding)",
+    "winner": "Gemini 3.1 Pro",
+    "score": "80.6%",
+    "hint": ""
+  },
+  {
+    "lbl": "GPQA Diamond (Science)",
+    "winner": "Gemini 3.1 Pro",
+    "score": "94.3%",
+    "hint": ""
+  },
+  {
+    "lbl": "Humanity's Last Exam",
+    "winner": "Gemini 3.1 Pro",
+    "score": "44.4%",
+    "hint": ""
+  },
+  {
+    "lbl": "AI Intelligence Index (tied)",
+    "winner": "GPT-5.4 / Gemini 3.1 Pro",
+    "score": "57 each",
+    "hint": "Artificial Analysis"
+  },
+  {
+    "lbl": "Codeforces Elo (at o3 launch)",
+    "winner": "OpenAI o3",
+    "score": "2727",
+    "hint": ""
+  },
+  {
+    "lbl": "IMO Math (Gold Medal)",
+    "winner": "Gemini 3 Deep Think",
+    "score": "Gold",
+    "hint": "standard"
+  },
+  {
+    "lbl": "AIME 2026 Math (open model)",
+    "winner": "Gemma 4 31B IT",
+    "score": "89.2%",
+    "hint": "open weights · Apr 2, 2026"
+  }
+];
+
+const SIGNATURES = [
+  {
+    "provider": "openai",
+    "label": "OpenAI / ChatGPT",
+    "color": "#2b8fd4",
+    "items": [
+      "<strong>Reasoning tiers:</strong> Selectable effort (low → xhigh) across o-series models",
+      "<strong>Native multimodal CoT:</strong> o4-mini reasons over images in chain-of-thought",
+      "<strong>Agentic ecosystem:</strong> Deep Research → ChatGPT Agent → Atlas browser",
+      "<strong>Auto-routing:</strong> GPT-5 intelligently switches between fast and reasoning modes",
+      "<strong>Personality customization:</strong> GPT-5.1 introduced selectable model personality"
+    ]
+  },
+  {
+    "provider": "gemini",
+    "label": "Google Gemini",
+    "color": "#1ea868",
+    "items": [
+      "<strong>Native multimodality:</strong> Text, images, video, audio, PDF — not bolted on",
+      "<strong>Longest context:</strong> 1M input / 64K output tokens (3.1 Pro)",
+      "<strong>Search grounding:</strong> Real-time Google Search integration in every tier",
+      "<strong>Open models:</strong> Gemma 4 — Apache 2.0, best-in-class open weights",
+      "<strong>MoE architecture:</strong> Gemini 3 uses sparse MoE for efficiency at scale"
+    ]
+  },
+  {
+    "provider": "claude",
+    "label": "Anthropic Claude",
+    "color": "#d4601a",
+    "items": [
+      "<strong>Controllable thinking:</strong> Developer-adjustable thinking budget up to 128K tokens",
+      "<strong>Longest agentic tasks:</strong> 14.5 hour task horizon; best multi-step coding agent",
+      "<strong>Safety leadership:</strong> L3 safety classification; first to refuse abusive users",
+      "<strong>MCP open standard:</strong> Donated Model Context Protocol to open source",
+      "<strong>Infinite context:</strong> Infinite Chats eliminates context window errors"
+    ]
+  },
+  {
+    "provider": "aimode",
+    "label": "Google AI Mode",
+    "color": "#6a52c8",
+    "items": [
+      "<strong>Full search replacement:</strong> Conversational interface replacing the SERP entirely",
+      "<strong>Multi-part query handling:</strong> Designed for complex, multi-step research",
+      "<strong>Canvas workspace:</strong> Interactive content creation integrated into search",
+      "<strong>GEO impact:</strong> Biggest threat to traditional organic traffic"
+    ]
+  },
+  {
+    "provider": "aioverview",
+    "label": "Google AI Overviews",
+    "color": "#c08010",
+    "items": [
+      "<strong>Massive scale:</strong> 200+ countries, 40+ languages — largest AI search deployment",
+      "<strong>SERP dominance:</strong> 67% desktop / 75% mobile screen space",
+      "<strong>Publisher friction:</strong> Multiple lawsuits (Chegg, Penske Media) over traffic loss",
+      "<strong>GEO signal:</strong> Being cited in AI Overviews is a key new SEO KPI"
+    ]
+  },
+  {
+    "provider": "perplexity",
+    "label": "Perplexity",
+    "color": "#3a7ab8",
+    "items": [
+      "<strong>Real-time web grounding:</strong> All Sonar models ground every response in live search",
+      "<strong>Multi-model comparison:</strong> Model Council lets users compare GPT-5, Claude, Gemini",
+      "<strong>AI-native browser:</strong> Comet — the only major AI-first browser",
+      "<strong>Distribution partnerships:</strong> Snapchat ($400M), Azure ($750M GPU deal)"
+    ]
+  }
+];
 
 /* ===================================================== */
-/* TIMELINE STATE                                        */
+/* TIMELINE STATE                                         */
 /* ===================================================== */
 let activeYears = new Set(['2025','2026']);
 let reversed = false;
 
-function COL_YEAR(col) {
-  // cols 0–11 = 2025 (Jan–Dec), 12+ = 2026
-  return col <= 11 ? '2025' : '2026';
-}
+// col 0–11 = 2025, col 12–15 = 2026
+const COL_YEAR = col => col <= 11 ? '2025' : '2026';
 
 /* ===================================================== */
-/* RENDER TIMELINE                                       */
+/* RENDER TIMELINE                                        */
 /* ===================================================== */
 function renderTimeline() {
-  if (!dataLoaded) return;
   const grid = document.getElementById('timeline-grid');
   grid.innerHTML = '';
 
+  // which cols to show, in which order
   let cols = MONTHS.map((_,i) => i).filter(c => activeYears.has(COL_YEAR(c)));
   if (reversed) cols = [...cols].reverse();
 
@@ -533,7 +1542,7 @@ function renderTimeline() {
     grid.appendChild(h);
   });
 
-  // provider rows
+  // each provider row
   PROVIDERS.forEach(prov => {
     const rl = document.createElement('div');
     rl.className = 'trl';
@@ -568,10 +1577,40 @@ function renderTimeline() {
 }
 
 /* ===================================================== */
-/* RENDER BENCHMARKS                                     */
+/* YEAR FILTER CHIPS                                      */
+/* ===================================================== */
+document.getElementById('yr-2025').addEventListener('click', function() {
+  const yr = '2025';
+  if (activeYears.has(yr) && activeYears.size === 1) return; // keep at least one
+  activeYears.has(yr) ? activeYears.delete(yr) : activeYears.add(yr);
+  this.classList.toggle('active', activeYears.has(yr));
+  renderTimeline();
+});
+document.getElementById('yr-2026').addEventListener('click', function() {
+  const yr = '2026';
+  if (activeYears.has(yr) && activeYears.size === 1) return;
+  activeYears.has(yr) ? activeYears.delete(yr) : activeYears.add(yr);
+  this.classList.toggle('active', activeYears.has(yr));
+  renderTimeline();
+});
+
+/* ===================================================== */
+/* REVERSE BUTTON                                         */
+/* ===================================================== */
+document.getElementById('btn-reverse').addEventListener('click', function() {
+  reversed = !reversed;
+  this.classList.toggle('active', reversed);
+  this.querySelector('span') && (this.querySelector('span').textContent = reversed ? 'Oldest First' : 'Newest First');
+  // update text node (button has svg + text)
+  const textNode = [...this.childNodes].find(n => n.nodeType === 3);
+  if (textNode) textNode.textContent = reversed ? ' Oldest First' : ' Newest First';
+  renderTimeline();
+});
+
+/* ===================================================== */
+/* RENDER BENCHMARKS                                      */
 /* ===================================================== */
 function renderBenchmarks() {
-  if (!dataLoaded) return;
   const grid = document.getElementById('bench-grid');
   grid.innerHTML = '';
   BENCHMARKS.forEach(b => {
@@ -589,10 +1628,9 @@ function renderBenchmarks() {
 }
 
 /* ===================================================== */
-/* RENDER SIGNATURES                                     */
+/* RENDER SIGNATURES                                      */
 /* ===================================================== */
 function renderSignatures() {
-  if (!dataLoaded) return;
   const grid = document.getElementById('feat-grid');
   grid.innerHTML = '';
   SIGNATURES.forEach(s => {
@@ -609,76 +1647,7 @@ function renderSignatures() {
 }
 
 /* ===================================================== */
-/* BUILD LEGEND                                          */
-/* ===================================================== */
-function buildLegend() {
-  const el = document.getElementById('legend');
-  el.innerHTML = '';
-  PROVIDERS.forEach(p => {
-    el.innerHTML += `<div class="legend-item"><div class="pip" style="background:${p.color}"></div>${p.label}</div>`;
-  });
-}
-
-/* ===================================================== */
-/* LOAD DATA                                             */
-/* ===================================================== */
-(function() {
-  const data = {"meta":{"last_updated":"2026-04-24","coverage":"Jan 2025 – Apr 2026"},"months":["Jan '25","Feb '25","Mar '25","Apr '25","May '25","Jun '25","Jul '25","Aug '25","Sep '25","Oct '25","Nov '25","Dec '25","Jan '26","Feb '26","Mar '26","Apr '26"],"providers":[{"id":"openai","label":"OpenAI","color":"#2b8fd4"},{"id":"gemini","label":"Gemini","color":"#1ea868"},{"id":"claude","label":"Claude","color":"#d4601a"},{"id":"aimode","label":"AI Mode","color":"#6a52c8"},{"id":"aioverview","label":"AI Overviews","color":"#c08010"},{"id":"perplexity","label":"Perplexity","color":"#3a7ab8"}],"events":[{"provider":"openai","col":0,"date":"Jan 31","name":"o3-mini","tags":["reasoning","3 effort levels"],"tip":["Low/medium/high reasoning effort selector","AIME 2024: 87.3%, GPQA: 79.7%","SWE-bench Verified: 49.3%","Codeforces Elo: 2130"]},{"provider":"openai","col":1,"date":"Feb 27","name":"GPT-4.5","tags":["non-CoT","humanlike"],"tip":["Last non-chain-of-thought GPT model","Better subtext understanding, ~20% info extraction gain","Outperforms GPT-4o on multilingual MMLU"]},{"provider":"openai","col":1,"date":"Feb","name":"Deep Research","tags":["agents","web+reasoning"],"tip":["o3 + web search for autonomous multi-step research","27% on Humanity's Last Exam","Pro users only initially"]},{"provider":"openai","col":2,"date":"Mar","name":"GPT Image 1","tags":["image gen"],"tip":["Native multimodal image gen on GPT-4o architecture","Replaced DALL-E 3 in ChatGPT"]},{"provider":"openai","col":3,"date":"Apr 14","name":"GPT-4.1 family","tags":["coding","mini/nano"],"tip":["Coding-focused improvements","4.1 mini replaced 4o mini as default","API-first; ChatGPT rollout May 14"]},{"provider":"openai","col":3,"date":"Apr 16","name":"o3 + o4-mini","tags":["reasoning","multimodal CoT"],"tip":["o3: GPQA 87.7%, SWE-bench 71.7%, Elo 2727","o4-mini: processes images in chain-of-thought","ARC-AGI: 3× accuracy of o1"]},{"provider":"openai","col":5,"date":"Jun 10","name":"o3-pro","tags":["high compute"],"tip":["Higher-compute o3 variant for enhanced accuracy","Pro and Plus subscribers only"]},{"provider":"openai","col":6,"date":"Jul","name":"ChatGPT Agent","tags":["agentic"],"tip":["Multi-step autonomous task performer","Web browsing + info gathering + summarization"]},{"provider":"openai","col":7,"date":"Aug 7","name":"GPT-5 + mini","tags":["native multimodal","auto router"],"tip":["Text + vision trained together from scratch","Auto-selects fast vs. reasoning mode","Agentic: sets up desktop env, browses web","Multiple reasoning tiers (minimal → xhigh)"]},{"provider":"openai","col":9,"date":"Oct","name":"ChatGPT Atlas","tags":["browser","agentic"],"tip":["AI-integrated web browser","Autonomous online navigation mode"]},{"provider":"openai","col":10,"date":"Nov 12","name":"GPT-5.1","tags":["personality"],"tip":["Customizable personality selection"]},{"provider":"openai","col":11,"date":"Dec 11","name":"GPT-5.2","tags":["iterative"],"tip":["Iterative update to GPT-5 family"]},{"provider":"openai","col":13,"date":"Feb 5","name":"GPT-5.3-Codex","tags":["coding"],"tip":["Specialized for software development"]},{"provider":"openai","col":14,"date":"Mar 3","name":"GPT-5.3-Instant","tags":["speed"],"tip":["General-purpose rapid-response variant"]},{"provider":"openai","col":14,"date":"Mar 5","name":"GPT-5.4","tags":["current","AI Index #1"],"tip":["Professional work + computer use focus","Tied #1 Artificial Analysis Intelligence Index (57)"]},{"provider":"openai","col":15,"date":"Apr 23","name":"GPT-5.5","tags":["super app","current"],"tip":["Released Apr 23, 2026","One step closer to an AI super app","Expanded capabilities and deeper cross-platform integration"]},{"provider":"gemini","col":1,"date":"Feb 5","name":"2.0 Flash GA + Pro Exp","tags":["multimodal","realtime"],"tip":["Agentic era flagship; real-time audio/video API","Native image gen + TTS with SynthID watermark","Flash-Lite: cost/speed optimized budget tier"]},{"provider":"gemini","col":2,"date":"Mar 25","name":"Gemini 2.5 Pro","tags":["thinking model","#1 arena"],"tip":["First explicit thinking model from Google","Debuted #1 on LMArena by ~40 points","Gold-medal level on IMO math competition"]},{"provider":"gemini","col":3,"date":"Apr 17","name":"Gemini 2.5 Flash","tags":["speed","price-perf"],"tip":["Speed-optimized thinking model","Best price-performance on reasoning tasks"]},{"provider":"gemini","col":4,"date":"May 20 (I/O)","name":"2.5 Pro/Flash GA","tags":["audio output","400M users"],"tip":["2.5 Pro + Flash confirmed default across products","Native audio output added","400M monthly active users"]},{"provider":"gemini","col":5,"date":"Jun 17","name":"2.5 Flash-Lite GA","tags":["efficiency"],"tip":["Fastest + most cost-efficient in 2.5 series"]},{"provider":"gemini","col":7,"date":"Aug 26","name":"Nano Banana (image)","tags":["viral","image edit"],"tip":["Viral image generation/editing model","+10M new users in weeks","200M+ image edits in first weeks"]},{"provider":"gemini","col":10,"date":"Nov 18","name":"Gemini 3 Pro","tags":["MoE","64K output"],"tip":["Sparse mixture-of-experts architecture","64K token output","750M MAU by Feb 2026"]},{"provider":"gemini","col":11,"date":"Dec 3","name":"Gemini 3 Deep Think","tags":["reasoning","IMO gold"],"tip":["IMO gold-medal standard math reasoning","Full CoT summary shown to users","Ultra subscribers only"]},{"provider":"gemini","col":11,"date":"Dec 17","name":"Gemini 3 Flash","tags":["frontier speed"],"tip":["Frontier-class at reduced cost","Replaced 2.5 Flash"]},{"provider":"gemini","col":13,"date":"Feb 19","name":"Gemini 3.1 Pro","tags":["SOTA benchmarks","AI Index #1"],"tip":["ARC-AGI-2: 77.1%","SWE-Bench: 80.6%","GPQA Diamond: 94.3%","1M input / 64K output tokens","Tied #1 AI Index (score 57)"]},{"provider":"gemini","col":14,"date":"Mar 3","name":"Gemini 3.1 Flash-Lite","tags":["scalable"],"tip":["Intelligence optimized for scalable deployment","API-first release"]},{"provider":"gemini","col":15,"date":"Apr 2","name":"Gemma 4","tags":["open model","MoE","256K ctx"],"tip":["Released Apr 2, 2026 — Apache 2.0 open weights","4 sizes: E2B/E4B edge + 26B MoE + 31B dense","256K context; multimodal (image, audio, video)","31B IT: AIME 2026 89.2%, GPQA Diamond 84.3%, Arena 1452"]},{"provider":"gemini","col":15,"date":"Apr 22","name":"Gemini 3.1 Flash TTS","tags":["speech synthesis","Cloud Next '26"],"tip":["Announced at Google Cloud Next '26 (Apr 22–23)","Next-gen expressive AI speech synthesis"]},{"provider":"gemini","col":15,"date":"Apr 22","name":"Gemini Robotics-ER 1.6","tags":["robotics","embodied AI"],"tip":["Announced at Google Cloud Next '26","Enhanced embodied reasoning for real-world robotics tasks"]},{"provider":"claude","col":1,"date":"Feb 24","name":"Claude 3.7 Sonnet","tags":["extended thinking","SWE #1"],"tip":["First visible, controllable chain-of-thought","Thinking budget up to 128K tokens","SWE-bench: 70.3% (with scaffolding)","Launched Claude Code preview"]},{"provider":"claude","col":4,"date":"May 22","name":"Sonnet 4 + Opus 4","tags":["L3 safety","7hr coding"],"tip":["Opus 4: Level 3 safety classification","Coded 7+ hours straight in benchmarks","Claude Code became GA"]},{"provider":"claude","col":7,"date":"Aug 5","name":"Opus 4.1","tags":["conversation end"],"tip":["Can terminate conversations when persistently abused"]},{"provider":"claude","col":8,"date":"Sep 29","name":"Sonnet 4.5","tags":["best coding","Jul '25 cutoff"],"tip":["Knowledge cutoff: July 2025","Probably the best coding model — Simon Willison"]},{"provider":"claude","col":9,"date":"Oct 15–20","name":"Haiku 4.5 + Code async","tags":["mobile","background tasks"],"tip":["Haiku 4.5: fast, cost-effective, available on mobile","Claude Code async: web-based background coding agent"]},{"provider":"claude","col":10,"date":"Nov 24","name":"Opus 4.5","tags":["infinite chats","spreadsheets"],"tip":["Infinite Chats — no context window limit errors","Enhanced coding and workplace automation"]},{"provider":"claude","col":11,"date":"Dec 9","name":"MCP Open Source","tags":["open protocol"],"tip":["Anthropic donated Model Context Protocol","Founded Agentic AI Foundation"]},{"provider":"claude","col":13,"date":"Feb 5","name":"Opus 4.6","tags":["arena #1","14.5hr tasks"],"tip":["Arena Leaderboard #1 (score 1504, thinking mode)","Max task horizon: 14.5 hours at 50% success","Manages teams of AI sub-agents"]},{"provider":"claude","col":13,"date":"Feb 17","name":"Sonnet 4.6","tags":["Jan '26 cutoff","scale"],"tip":["Frontier performance at scale, same price as 4.5","Knowledge cutoff: Jan 2026"]},{"provider":"claude","col":15,"date":"Apr 16","name":"Claude Opus 4.7","tags":["coding","vision","current"],"tip":["13% improvement on coding benchmarks vs Opus 4.6","Vision: accepts images up to 2,576px (3× prior resolution)","New xhigh effort level","Same pricing: $5/M input, $25/M output tokens"]},{"provider":"claude","col":15,"date":"Apr 17","name":"Claude Design","tags":["visual creation","Anthropic Labs"],"tip":["New collaborative tool from Anthropic Labs","Creates polished designs, prototypes, slides, one-pagers"]},{"provider":"aimode","col":2,"date":"Mar","name":"AI Mode Launch","tags":["Search Labs","conversational"],"tip":["Experimental in Search Labs / Google One AI Premium","Full conversational search replacement","Handles complex multi-part queries","Powered by Gemini 2.0+"]},{"provider":"aimode","col":4,"date":"May","name":"Broader Rollout","tags":["expansion"],"tip":["Wider rollout within Google Search ecosystem"]},{"provider":"aimode","col":14,"date":"Mar","name":"Canvas + Nano Banana 2","tags":["image gen","canvas"],"tip":["Creative canvas workspace added","Nano Banana 2 image gen integrated"]},{"provider":"aioverview","col":0,"date":"Oct '24 → Jan","name":"100+ Countries","tags":["global"],"tip":["Available in 100+ countries as of Oct 2024","67% desktop / 75% mobile screen SERP space"]},{"provider":"aioverview","col":1,"date":"Feb","name":"Legal Challenge (Chegg)","tags":["legal"],"tip":["Chegg sued Alphabet over AI Overviews reducing student traffic"]},{"provider":"aioverview","col":4,"date":"May","name":"200+ Countries, 40+ Languages","tags":["200 countries"],"tip":["200+ countries, 40+ languages"]},{"provider":"aioverview","col":8,"date":"Sep","name":"Publisher Lawsuit","tags":["legal"],"tip":["Penske Media (Rolling Stone, Hollywood Reporter) sued Google","Content reuse + traffic reduction claims"]},{"provider":"aioverview","col":12,"date":"Jan","name":"Health Query Restrictions","tags":["policy"],"tip":["Restricted AI Overviews on health queries","Following Guardian investigation into harmful outputs"]},{"provider":"perplexity","col":0,"date":"Jan 23","name":"Perplexity Assistant","tags":["multi-app","camera"],"tip":["Multi-app task execution (rides, music, calendar)","Phone camera for real-world queries"]},{"provider":"perplexity","col":1,"date":"Feb 12","name":"Sonar Models","tags":["web grounded","Llama 3.3"],"tip":["Sonar / Sonar Pro / Sonar Reasoning Pro / Deep Research","Built-in web grounding for all tiers"]},{"provider":"perplexity","col":6,"date":"Jul","name":"Comet Browser (Pro)","tags":["AI browser"],"tip":["AI-powered Chromium browser","Article summarization + research built-in"]},{"provider":"perplexity","col":9,"date":"Oct 2","name":"Comet Free + Background","tags":["free release"],"tip":["Free public download","Background assistant for Max subscribers"]},{"provider":"perplexity","col":10,"date":"Nov 6","name":"Snap Partnership","tags":["$400M","Snapchat"],"tip":["Powers search inside Snapchat","Reported $400M deal"]},{"provider":"perplexity","col":12,"date":"Jan","name":"Azure Partnership","tags":["$750M","3yr GPU"],"tip":["3-year, $750M GPU capacity commitment","Powers Deep Research + Model Council"]},{"provider":"perplexity","col":13,"date":"Feb 5–27","name":"Model Council + Perplexity Computer","tags":["multi-model"],"tip":["Compare outputs from multiple frontier LLMs side-by-side","Subscription-first model; discontinued AI ads"]},{"provider":"perplexity","col":15,"date":"Apr 24","name":"DeepSeek new model (preview)","tags":["frontier gap","open"],"tip":["Previewed Apr 24, 2026 (source: TechCrunch)","Described as closing the gap with frontier models","Full benchmarks not yet published"]}],"benchmarks":[{"lbl":"Arena Leaderboard (Overall)","winner":"Claude Opus 4.7","score":"1504+","hint":"thinking mode"},{"lbl":"ARC-AGI-2 (General Reasoning)","winner":"Gemini 3.1 Pro","score":"77.1%","hint":""},{"lbl":"SWE-Bench Verified (Coding)","winner":"Gemini 3.1 Pro","score":"80.6%","hint":""},{"lbl":"GPQA Diamond (Science)","winner":"Gemini 3.1 Pro","score":"94.3%","hint":""},{"lbl":"Humanity's Last Exam","winner":"Gemini 3.1 Pro","score":"44.4%","hint":""},{"lbl":"AI Intelligence Index (tied)","winner":"GPT-5.4 / Gemini 3.1 Pro","score":"57 each","hint":"Artificial Analysis"},{"lbl":"Codeforces Elo (at o3 launch)","winner":"OpenAI o3","score":"2727","hint":""},{"lbl":"IMO Math (Gold Medal)","winner":"Gemini 3 Deep Think","score":"Gold","hint":"standard"},{"lbl":"AIME 2026 Math (open model)","winner":"Gemma 4 31B IT","score":"89.2%","hint":"open weights · Apr 2, 2026"}],"signatures":[{"provider":"openai","label":"OpenAI / ChatGPT","color":"#2b8fd4","items":["<strong>Reasoning tiers:</strong> Selectable effort (low → xhigh) across o-series models","<strong>Native multimodal CoT:</strong> o4-mini reasons over images in chain-of-thought","<strong>Agentic ecosystem:</strong> Deep Research → ChatGPT Agent → Atlas browser","<strong>Auto-routing:</strong> GPT-5 intelligently switches between fast and reasoning modes","<strong>Personality customization:</strong> GPT-5.1 introduced selectable model personality"]},{"provider":"gemini","label":"Google Gemini","color":"#1ea868","items":["<strong>Native multimodality:</strong> Text, images, video, audio, PDF — not bolted on","<strong>Longest context:</strong> 1M input / 64K output tokens (3.1 Pro)","<strong>Search grounding:</strong> Real-time Google Search integration in every tier","<strong>Open models:</strong> Gemma 4 — Apache 2.0, best-in-class open weights","<strong>MoE architecture:</strong> Gemini 3 uses sparse MoE for efficiency at scale"]},{"provider":"claude","label":"Anthropic Claude","color":"#d4601a","items":["<strong>Controllable thinking:</strong> Developer-adjustable thinking budget up to 128K tokens","<strong>Longest agentic tasks:</strong> 14.5 hour task horizon; best multi-step coding agent","<strong>Safety leadership:</strong> L3 safety classification; first to refuse abusive users","<strong>MCP open standard:</strong> Donated Model Context Protocol to open source","<strong>Infinite context:</strong> Infinite Chats eliminates context window errors"]},{"provider":"aimode","label":"Google AI Mode","color":"#6a52c8","items":["<strong>Full search replacement:</strong> Conversational interface replacing the SERP entirely","<strong>Multi-part query handling:</strong> Designed for complex, multi-step research","<strong>Canvas workspace:</strong> Interactive content creation integrated into search","<strong>GEO impact:</strong> Biggest threat to traditional organic traffic"]},{"provider":"aioverview","label":"Google AI Overviews","color":"#c08010","items":["<strong>Massive scale:</strong> 200+ countries, 40+ languages — largest AI search deployment","<strong>SERP dominance:</strong> 67% desktop / 75% mobile screen space","<strong>Publisher friction:</strong> Multiple lawsuits (Chegg, Penske Media) over traffic loss","<strong>GEO signal:</strong> Being cited in AI Overviews is a key new SEO KPI"]},{"provider":"perplexity","label":"Perplexity","color":"#3a7ab8","items":["<strong>Real-time web grounding:</strong> All Sonar models ground every response in live search","<strong>Multi-model comparison:</strong> Model Council lets users compare GPT-5, Claude, Gemini","<strong>AI-native browser:</strong> Comet — the only major AI-first browser","<strong>Distribution partnerships:</strong> Snapchat ($400M), Azure ($750M GPU deal)"]}]};
-  (function(data) {
-    MONTHS     = data.months;
-    PROVIDERS  = data.providers;
-    EVENTS     = data.events;
-    BENCHMARKS = data.benchmarks;
-    SIGNATURES = data.signatures;
-    dataLoaded = true;
-
-    // populate dynamic UI text
-    const d = data.meta.last_updated;
-    document.getElementById('badge-date').textContent = d;
-    document.getElementById('hero-coverage').textContent = data.meta.coverage;
-    document.getElementById('hero-coverage-b').textContent = data.meta.coverage;
-    document.getElementById('hero-event-count').textContent = EVENTS.length;
-
-    buildLegend();
-    renderTimeline();
-
-    // re-observe any .reveal elements inside the now-populated shell
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-  })
-  })(data);
-})();
-
-/* ===================================================== */
-/* YEAR FILTER CHIPS                                     */
-/* ===================================================== */
-document.getElementById('yr-2025').addEventListener('click', function() {
-  const yr = '2025';
-  if (activeYears.has(yr) && activeYears.size === 1) return;
-  activeYears.has(yr) ? activeYears.delete(yr) : activeYears.add(yr);
-  this.classList.toggle('active', activeYears.has(yr));
-  renderTimeline();
-});
-document.getElementById('yr-2026').addEventListener('click', function() {
-  const yr = '2026';
-  if (activeYears.has(yr) && activeYears.size === 1) return;
-  activeYears.has(yr) ? activeYears.delete(yr) : activeYears.add(yr);
-  this.classList.toggle('active', activeYears.has(yr));
-  renderTimeline();
-});
-
-/* ===================================================== */
-/* REVERSE BUTTON                                        */
-/* ===================================================== */
-document.getElementById('btn-reverse').addEventListener('click', function() {
-  reversed = !reversed;
-  this.classList.toggle('active', reversed);
-  const textNode = [...this.childNodes].find(n => n.nodeType === 3);
-  if (textNode) textNode.textContent = reversed ? ' Oldest First' : ' Newest First';
-  renderTimeline();
-});
-
-/* ===================================================== */
-/* TABS                                                  */
+/* TABS                                                   */
 /* ===================================================== */
 const pill = document.getElementById('tab-pill');
 function moveTabPill(btn) {
@@ -707,7 +1676,7 @@ requestAnimationFrame(() => moveTabPill(document.querySelector('.tab.active')));
 window.addEventListener('resize', () => moveTabPill(document.querySelector('.tab.active')));
 
 /* ===================================================== */
-/* SCROLL REVEAL                                         */
+/* SCROLL REVEAL                                          */
 /* ===================================================== */
 const io = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
@@ -715,15 +1684,41 @@ const io = new IntersectionObserver(entries => {
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
 /* ===================================================== */
-/* MAGNETIC BUTTONS                                      */
+/* CURSOR GLOW                                            */
+/* ===================================================== */
+const cg = document.querySelector('.cursor-glow');
+const bg = document.querySelector('.bg');
+let cx = 0, cy = 0, tx = 0, ty = 0;
+window.addEventListener('pointermove', e => {
+  tx = e.clientX; ty = e.clientY;
+  bg.style.setProperty('--mx', (e.clientX / innerWidth * 100) + '%');
+  bg.style.setProperty('--my', (e.clientY / innerHeight * 100) + '%');
+});
+(function animCursor() {
+  cx += (tx - cx) * 0.08;
+  cy += (ty - cy) * 0.08;
+  cg.style.setProperty('--cx', cx + 'px');
+  cg.style.setProperty('--cy', cy + 'px');
+  requestAnimationFrame(animCursor);
+})();
+
+/* ===================================================== */
+/* MAGNETIC BUTTONS                                       */
 /* ===================================================== */
 document.querySelectorAll('.tab').forEach(btn => {
   btn.addEventListener('pointermove', e => {
     const r = btn.getBoundingClientRect();
-    btn.style.transform = `translate(${(e.clientX - r.left - r.width/2) * 0.15}px, ${(e.clientY - r.top - r.height/2) * 0.15}px)`;
+    const mx = e.clientX - r.left - r.width / 2;
+    const my = e.clientY - r.top - r.height / 2;
+    btn.style.transform = `translate(${mx * 0.15}px, ${my * 0.15}px)`;
   });
   btn.addEventListener('pointerleave', () => { btn.style.transform = ''; });
 });
+
+/* ===================================================== */
+/* INIT                                                   */
+/* ===================================================== */
+renderTimeline();
 </script>
 </body>
 </html>
